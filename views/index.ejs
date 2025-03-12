@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="css/home-styles.css">
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Link to the global styles -->
+</head>
+<body>
+    <!-- Navbar -->
+    <%- include('navbar', { isAuthenticated: isAuthenticated }) %>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="animate-text">Welcome to ChatBots</h1>
+            <p class="animate-text">Empowering Small Businesses with AI-driven Chat Solutions</p>
+            <button class="cta-btn">Get Started</button>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section-about">
+        <div class="about-content">
+            <h2 class="animate-text">About Us</h2>
+            <p class="animate-text">We provide custom-made chatbots designed specifically for small businesses to help automate communication and increase productivity.</p>
+        </div>
+        <div class="about-image">
+            <img src="about-image.jpg" alt="About Image" class="animate-img">
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section-features">
+        <div class="features-content">
+            <h2 class="animate-text">Features</h2>
+            <p class="animate-text">Our chatbots offer a variety of powerful features to help you engage with customers effortlessly.</p>
+        </div>
+        <div class="features-image">
+            <img src="features-image.jpg" alt="Features Image" class="animate-img">
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section-contact">
+        <div class="contact-content">
+            <h2 class="animate-text">Contact Us</h2>
+            <p class="animate-text">Have any questions? Get in touch with us today!</p>
+        </div>
+        <div class="contact-image">
+            <img src="contact-image.jpg" alt="Contact Image" class="animate-img">
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 ChatBots | All rights reserved.</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

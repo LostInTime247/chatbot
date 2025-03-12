@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <link rel="stylesheet" href="/path/to/your/navbar.css"> <!-- Your existing navbar CSS -->
+  <link rel="stylesheet" href="/css/styles.css"> <!-- Profile page-specific styles -->
+  <link rel="stylesheet" href="/css/profile.css"> <!-- Profile page-specific styles -->
+</head>
+<title>User Profile | Chatbots</title>
+<body>
+  <%- include('navbar', { isAuthenticated: isAuthenticated }) %> <!-- Navbar include with dynamic authentication check -->
+  <!-- Profile Content Section -->
+  <div class="container">
+    <div class="profile-card">
+      <h2>Welcome, <%= username %></h2>
+      
+      <!-- Flash message if any -->
+ 
+      <form action="/profile" method="POST">
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" value="<%= username %>" required>
+        </div>
+
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" value="<%= email %>" required>
+        </div>
+
+        <div class="input-group">
+          <label for="password">Current Password</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="input-group">
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword" name="newPassword">
+        </div>
+
+        <button type="submit" class="btn">Update Profile</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2025 Your Company. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

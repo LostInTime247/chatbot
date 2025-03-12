@@ -1,0 +1,56 @@
+/* Error Page Styling */
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #ffffff;
+    color: #333;
+}
+
+/* Bounce-in animation */
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    50% {
+        opacity: 0.5;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.error-container h1 {
+    font-size: 3rem;
+    color: #ff6600; /* Orange accent */
+    animation: bounceIn 0.8s ease-out; /* Apply bounce animation */
+}
+
+.error-container p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    animation: bounceIn 1s ease-out 0.2s both; /* Delayed animation */
+}
+
+.error-button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #ff6600;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: 0.3s ease-in-out;
+    animation: bounceIn 1.2s ease-out 0.4s both; /* More delay */
+}
+
+.error-button:hover {
+    background-color: #cc5200; /* Darker orange */
+}

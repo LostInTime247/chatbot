@@ -1,0 +1,228 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and Font */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7fc;
+    background: url('/public/images/hh.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    padding: 15px 50px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+}
+
+.navbar-links li {
+    margin-left: 20px;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+    color: #ff7f00;
+}
+
+/* Hero Section */
+.hero {
+    background-color: #ff7f00;
+    color: white;
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 30px;
+    overflow: hidden;
+    position: relative;
+    background: url('/public/images/hh.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+}
+
+.hero h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(50px);
+    animation: fadeInUp 1s forwards 0.5s;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(50px);
+    animation: fadeInUp 1s forwards 1s;
+}
+
+.hero .cta-btn {
+    padding: 10px 20px;
+    background-color: white;
+    color: #ff7f00;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.hero .cta-btn:hover {
+    background-color: #e76f00;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* About, Features, Contact Sections */
+section {
+    padding: 100px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+    position: relative;
+    opacity: 0;
+    animation: fadeInSection 1s forwards;
+}
+
+@keyframes fadeInSection {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Misalignment and Animations for Content */
+.section-about,
+.section-features,
+.section-contact {
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.animate-text {
+    opacity: 0;
+    transform: translateY(50px);
+    animation: slideInText 1s forwards;
+}
+
+@keyframes slideInText {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animate Images */
+.animate-img {
+    opacity: 0;
+    transform: translateY(50px);
+    animation: slideInImage 1s forwards;
+}
+
+@keyframes slideInImage {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add More Animation Effects for Sections */
+.section-about .about-content {
+    animation-delay: 0.5s;
+}
+
+.section-about .about-image {
+    animation-delay: 1s;
+}
+
+.section-features .features-content {
+    animation-delay: 1.5s;
+}
+
+.section-features .features-image {
+    animation-delay: 2s;
+}
+
+.section-contact .contact-content {
+    animation-delay: 2.5s;
+}
+
+.section-contact .contact-image {
+    animation-delay: 3s;
+}
+
+/* Add Parallax Effect */
+.hero {
+    background-image: url('public/images/hh.png');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .section-about,
+    .section-features,
+    .section-contact {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .about-content,
+    .features-content,
+    .contact-content {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .about-image,
+    .features-image,
+    .contact-image {
+        width: 100%;
+    }
+}
+section.in-view {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 1s ease, transform 1s ease;
+}
+body {
+    background: url('/public/images/hh.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+}

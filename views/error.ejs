@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error | ChatBot</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Main styles -->
+    <link rel="stylesheet" href="/error.css"> <!-- Error page styles -->
+</head>
+<body>
+    <div class="error-container">
+        <%- include('navbar', { isAuthenticated: isAuthenticated }) %>
+        <h1>Oops! Something went wrong.</h1>
+        <p><%= message || "An unexpected error occurred. Please try again later." %></p>
+        <a href="/" class="error-button">Go Back Home</a>
+    </div>
+</body>
+</html>

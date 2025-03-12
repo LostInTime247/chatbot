@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/verify-styles.css">
+</head>
+<body class="verification-page">
+    <%- include('navbar', { isAuthenticated: isAuthenticated, username: username }) %>
+    
+    <div class="verification-container">
+        <div class="verification-box">
+            <h2>Email Verification</h2>
+            <p class="verification-message">
+                Please enter the verification code sent to your email to activate your account.
+            </p>
+            
+            <!-- Form for entering verification code -->
+            <form action="/verify-email" method="POST">
+                <div class="input-group">
+                    <label for="verificationCode">Verification Code</label>
+                    <input type="text" id="verificationCode" name="verificationCode" required placeholder="Enter code here">
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn">Verify</button>
+            </form>
+            
+            <% if (message) { %>
+                <div class="error-message"><%= message %></div>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
