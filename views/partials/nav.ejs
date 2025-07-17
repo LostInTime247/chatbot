@@ -1,0 +1,112 @@
+<nav class="navbar">
+  <div class="logo">
+    <a href="/" class="brand">NeuronBot<span>AI</span></a>
+  </div>
+
+  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+  <label for="nav-toggle" class="nav-toggle-label">&#9776;</label>
+
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/features">Features</a></li>
+    <li><a href="/pricing">Pricing</a></li>
+    <li><a href="/about">About</a></li>
+
+    <% if (isAuthenticated) { %>
+    <li><a href="/profile">Dashboard</a></li>
+    <li><a href="/logout">Logout</a></li>
+    <% } else { %>
+    <li><a href="/login">Login</a></li>
+    <li><a href="/register">Sign Up</a></li>
+    <% } %>
+  </ul>
+</nav>
+
+<style>
+  :root {
+    --neon-blue: #00f0ff;
+    --dark-bg: #0e0e0e;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --border-glow: rgba(0, 240, 255, 0.4);
+  }
+
+  .navbar {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-glow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+
+  .logo .brand {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--neon-blue);
+    text-decoration: none;
+    letter-spacing: 1px;
+  }
+
+  .logo span {
+    color: #000;
+  }
+
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-links li a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .nav-links li a:hover {
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--neon-blue);
+  }
+
+  /* Mobile toggle */
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-toggle-label {
+    display: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 768px) {
+    .nav-toggle-label {
+      display: block;
+    }
+
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 3rem;
+      background: var(--dark-bg);
+      flex-direction: column;
+      border: 1px solid var(--border-glow);
+      padding: 1rem 2rem;
+      border-radius: 10px;
+    }
+
+    .nav-toggle:checked + .nav-toggle-label + .nav-links {
+      display: flex;
+    }
+  }
+</style>

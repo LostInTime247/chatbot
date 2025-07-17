@@ -1,0 +1,19 @@
+<%- include('../partials/nav') %> <%- include('../partials/sidebar-client') %>
+
+<div class="main-content" style="margin-left: 220px; padding: 2rem">
+  <h1>Your Dashboard</h1>
+  <p>Hello, <%= username %>. Here's how your chatbot is doing:</p>
+
+  <div class="stats">
+    <div class="card">Today's Leads: 24</div>
+    <div class="card">Interactions: 89</div>
+    <div class="card">Bounce Rate: 12%</div>
+  </div>
+
+  <section style="margin-top: 2rem">
+    <h2>Latest Conversations</h2>
+    <p>(Real data coming soon...)</p>
+  </section>
+</div>
+
+<%- include('../partials/footer') %>

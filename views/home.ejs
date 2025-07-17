@@ -1,62 +1,166 @@
+<!-- index.ejs - Futuristic, clean landing page for AI chatbot SaaS -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Link to the global styles -->
-    <link rel="stylesheet" href="css/home-styles.css">
-</head>
-<body>
-    <%- include('navbar', { isAuthenticated: isAuthenticated, username: username }) %>
-    <!-- Hero Section -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Autopilot Your Business | AI Chatbot</title>
+    <link rel="stylesheet" href="/styles/main.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&display=swap"
+      rel="stylesheet"
+    />
+    <%- include('partials/nav') %>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Outfit", sans-serif;
+        background: linear-gradient(135deg, #f2f8ff, #e3ecfa);
+        color: #1f1f1f;
+        overflow-x: hidden;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 4rem;
+        background-color: transparent;
+      }
+      .logo {
+        font-weight: 600;
+        font-size: 1.5rem;
+        color: #0a2e73;
+      }
+      nav a {
+        margin: 0 1rem;
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+      nav a:hover {
+        color: #007bff;
+      }
+      .hero {
+        text-align: center;
+        padding: 5rem 2rem 2rem;
+        background: linear-gradient(to right, #e8f0ff, #ffffff);
+        position: relative;
+      }
+      .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #0c254d;
+      }
+      .hero p {
+        font-size: 1.25rem;
+        color: #555;
+        margin-bottom: 2rem;
+      }
+      .hero .cta-btn {
+        padding: 0.9rem 2rem;
+        font-size: 1rem;
+        background: #000;
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .hero .cta-btn:hover {
+        background: #222;
+      }
+      .features-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 4rem;
+      }
+      .feature-box {
+        background: #fff;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+      }
+      .feature-box:hover {
+        transform: translateY(-10px);
+      }
+      footer {
+        text-align: center;
+        padding: 2rem;
+        font-size: 0.9rem;
+        color: #777;
+      }
+      .badge {
+        background: #0f0f0f;
+        color: #fff;
+        padding: 0.3rem 1rem;
+        border-radius: 100px;
+        font-size: 0.75rem;
+        margin-left: 1rem;
+        animation: pop 1s ease-in-out infinite alternate;
+      }
+      @keyframes pop {
+        from {
+          transform: scale(1);
+        }
+        to {
+          transform: scale(1.05);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">NeuronBot<span class="badge">AI</span></div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="login">Login</a>
+        <a href="/signup">Signup</a>
+      </nav>
+    </header>
+
     <section class="hero">
-        <div class="hero-content">
-            <h1 class="animate-text">Welcome to ChatBots</h1>
-            <p class="animate-text">Empowering Small Businesses with AI-driven Chat Solutions</p>
-            
-            <a href="/register" class="cta-btn">Get Started</a>
-        </div>
+      <h1>Automate your business 24/7 with an AI assistant</h1>
+      <p>
+        Increase conversions, cut support costs, and impress customers — while
+        you sleep.
+      </p>
+      <button class="cta-btn">Try Free Demo</button>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="section-about">
-        <div class="about-content">
-            <h2 class="animate-text">About Us</h2>
-            <p class="animate-text">We provide custom-made chatbots designed specifically for small businesses to help automate communication and increase productivity.</p>
-        </div>
-        <div class="about-image">
-            <img src="about-image.jpg" alt="About Image" class="animate-img">
-        </div>
+    <section class="features-section" id="features">
+      <div class="feature-box">
+        <h3>Smart Personalization</h3>
+        <p>
+          Adapts responses uniquely per visitor — the more they engage, the
+          smarter it gets.
+        </p>
+      </div>
+      <div class="feature-box">
+        <h3>Always On, Always Fast</h3>
+        <p>
+          No sleep. No holidays. Your business runs 24/7 with intelligent,
+          lightning-fast replies.
+        </p>
+      </div>
+      <div class="feature-box">
+        <h3>Zero-Code Setup</h3>
+        <p>Launch your assistant in 2 minutes. No tech skills needed.</p>
+      </div>
+      <div class="feature-box">
+        <h3>Leads on Autopilot</h3>
+        <p>
+          Capture and qualify leads while your competitors are still reading
+          email.
+        </p>
+      </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="section-features">
-        <div class="features-content">
-            <h2 class="animate-text">Features</h2>
-            <p class="animate-text">Our chatbots offer a variety of powerful features to help you engage with customers effortlessly.</p>
-        </div>
-        <div class="features-image">
-            <img src="features-image.jpg" alt="Features Image" class="animate-img">
-        </div>
-    </section>
+    <%- include('partials/footer') %>
 
-    <!-- Contact Section -->
-    <section id="contact" class="section-contact">
-        <div class="contact-content">
-            <h2 class="animate-text">Contact Us</h2>
-            <p class="animate-text">Have any questions? Get in touch with us today!</p>
-        </div>
-        <div class="contact-image">
-            <img src="contact-image.jpg" alt="Contact Image" class="animate-img">
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 ChatBots | All rights reserved.</p>
-    </footer>
-
-    <script src="scripts.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
