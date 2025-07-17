@@ -1,15 +1,15 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-const session = require('express-session');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const crypto = require('crypto');
-const { sendVerificationEmail } = require('./emailUtils');
-const flash = require('connect-flash');
+const express = require("express");
+const path = require("path");
+const bodyParser = require("body-parser");
+const bcrypt = require("bcryptjs");
+const session = require("express-session");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const crypto = require("crypto");
+const { sendVerificationEmail } = require("./emailUtils");
+const flash = require("connect-flash");
 
 // Load environment variables
 dotenv.config();
@@ -18,17 +18,19 @@ const app = express();
 const port = 3000;
 
 // Setting up ejs
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
 // Middleware to parse POST data
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Session configuration
-app.use(session({
-  secret: 'your_secret_key', // Change this in production
-  resave: false,
-  saveUninitialized: true,
-}));
+app.use(
+  session({
+    secret: "your_secret_key", // Change this in production
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 // Initialize Passport.js middleware
 app.use(passport.initialize());
@@ -39,16 +41,22 @@ app.use(flash()); // Place this after session and passport middleware
 
 // Middleware to set locals for flash messages
 app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.isAuthenticated ? req.isAuthenticated() : false;
-  res.locals.message = req.flash('message'); // Make flash messages available in views
+  res.locals.isAuthenticated = req.isAuthenticated
+    ? req.isAuthenticated()
+    : false;
+  res.locals.message = req.flash("message"); // Make flash messages available in views
   next();
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => {
-    console.error('MongoDB connection error:', err);
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
     process.exit(1); // Gracefully exit the process if the connection fails
   });
 
@@ -64,31 +72,31 @@ const userSchema = new mongoose.Schema({
 });
 
 // Create User model
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 // Serve static files (CSS, JS, images)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Passport.js configuration
-passport.use(new LocalStrategy(
-  async (username, password, done) => {
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
     try {
       const user = await User.findOne({ username });
       if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
+        return done(null, false, { message: "Incorrect username." });
       }
 
       const match = await bcrypt.compare(password, user.password);
       if (match) {
         return done(null, user);
       } else {
-        return done(null, false, { message: 'Incorrect password.' });
+        return done(null, false, { message: "Incorrect password." });
       }
     } catch (err) {
       return done(err);
     }
-  }
-));
+  })
+);
 
 // Serialize and deserialize user
 passport.serializeUser((user, done) => done(null, user.id));
@@ -98,57 +106,62 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // Route for the homepage (index.html)
-app.get('/', (req, res) => {
-  res.render('home', { isAuthenticated: req.isAuthenticated(), username: req.user ? req.user.username : null });
+app.get("/", (req, res) => {
+  res.render("home", {
+    isAuthenticated: req.isAuthenticated(),
+    username: req.user ? req.user.username : null,
+  });
 });
 
 // Route for profile page
-app.get('/profile', (req, res) => {
+app.get("/profile", (req, res) => {
   if (req.isAuthenticated()) {
-    return res.render('profile', { 
-      isAuthenticated: true, 
-      username: req.user.username,  // Pass username
-      email: req.user.email,        // Pass email
-      message: req.flash('message') // Pass any flash messages
+    return res.render("profile", {
+      isAuthenticated: true,
+      username: req.user.username, // Pass username
+      email: req.user.email, // Pass email
+      message: req.flash("message"), // Pass any flash messages
     });
   } else {
-    res.redirect('/login');
+    res.redirect("/login");
   }
 });
 
-
 // Route for login page
-app.get('/login', (req, res) => {
-  res.render('login', { isAuthenticated: req.isAuthenticated() });
+app.get("/login", (req, res) => {
+  res.render("login", { isAuthenticated: req.isAuthenticated() });
 });
 
 // Route for login
-app.post('/login', passport.authenticate('local', {
-  successRedirect: '/profile',
-  failureRedirect: '/login',
-  failureFlash: true,
-}));
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/profile",
+    failureRedirect: "/login",
+    failureFlash: true,
+  })
+);
 
 // Route for register page
-app.get('/register', (req, res) => {
-  res.render('register', { 
-    isAuthenticated: req.isAuthenticated(), 
-    username: req.user ? req.user.username : null, 
-    message: null // Ensure `message` is always passed
+app.get("/register", (req, res) => {
+  res.render("register", {
+    isAuthenticated: req.isAuthenticated(),
+    username: req.user ? req.user.username : null,
+    message: null, // Ensure `message` is always passed
   });
 });
 
 // Register user
-app.post('/register', async (req, res) => {
+app.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
     // Check if the username or email already exists
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
-      return res.render('register', { 
+      return res.render("register", {
         isAuthenticated: req.isAuthenticated(),
-        message: 'Email or username already registered.' 
+        message: "Email or username already registered.",
       });
     }
 
@@ -157,8 +170,8 @@ app.post('/register', async (req, res) => {
 
     // Generate verification code
     const verificationCode = Math.floor(100000 + Math.random() * 900000); // Generates a 6-digit number
-    const verificationExpires = Date.now() + 3600000;  // 1 hour expiry time
-    const verificationNo = crypto.randomBytes(20).toString('hex');
+    const verificationExpires = Date.now() + 3600000; // 1 hour expiry time
+    const verificationNo = crypto.randomBytes(20).toString("hex");
     // Create the verification URL
     const verificationUrl = `${process.env.BASE_URL}/verify-email/${verificationNo}`;
     console.log("Verification code 1:", verificationCode);
@@ -187,64 +200,69 @@ app.post('/register', async (req, res) => {
   } catch (err) {
     console.error(err);
     next(err); // Send the error to the global error handler
-    return res.render('register', { 
+    return res.render("register", {
       isAuthenticated: req.isAuthenticated(),
-      message: 'Something went wrong. Please try again.' 
+      message: "Something went wrong. Please try again.",
     });
   }
 });
 
 // Route to handle email verification
 // Verification route (to verify the user's email with the code)
-app.get('/verify-email/:verificationNo', async (req, res) => {
+app.get("/verify-email/:verificationNo", async (req, res) => {
   const { verificationNo } = req.params;
 
   try {
     const user = await User.findOne({ verificationNo });
 
     if (!user) {
-      return res.render('verify-email', { 
-        message: 'Invalid or expired verification code.',
+      return res.render("verify-email", {
+        message: "Invalid or expired verification code.",
         isAuthenticated: req.isAuthenticated(), // Pass isAuthenticated
-        username: req.user ? req.user.username : null // Pass username if authenticated
+        username: req.user ? req.user.username : null, // Pass username if authenticated
       });
     }
 
     // Check if the verification code has expired
     if (user.verificationExpires < Date.now()) {
-      return res.render('verify-email', { 
-        message: 'Verification code has expired. Please request a new one.',
+      return res.render("verify-email", {
+        message: "Verification code has expired. Please request a new one.",
         isAuthenticated: req.isAuthenticated(), // Pass isAuthenticated
-        username: req.user ? req.user.username : null // Pass username if authenticated
+        username: req.user ? req.user.username : null, // Pass username if authenticated
       });
     }
     // Render the verification form with a message
-    res.render('verify-email', {
-      message: 'Please enter the verification code sent to your email.',
+    res.render("verify-email", {
+      message: "Please enter the verification code sent to your email.",
       isAuthenticated: req.isAuthenticated(),
-      username: req.user ? req.user.username : null
+      username: req.user ? req.user.username : null,
     });
-
   } catch (err) {
     console.error(err);
-    res.render('verify-email', { message: 'Something went wrong, try again later.' });
+    res.render("verify-email", {
+      message: "Something went wrong, try again later.",
+    });
   }
 });
 
 // Handle verification code submission (POST)
-app.post('/verify-email', async (req, res) => {
+app.post("/verify-email", async (req, res) => {
   const { verificationCode } = req.body;
 
   try {
     const user = await User.findOne({ verificationCode });
 
     if (!user) {
-      return res.render('verify-email', { message: 'Invalid or expired verification code.' });
+      return res.render("verify-email", {
+        message: "Invalid or expired verification code.",
+      });
     }
 
     // Check if the verification code has expired
     if (user.verificationExpires < Date.now()) {
-      return res.render('verify-email', { message: 'Verification code has expired. Please request a new one.' });
+      return res.render("verify-email", {
+        message: "Verification code has expired. Please request a new one.",
+      });
     }
 
     // Activate the user's account (remove the verification code)
@@ -254,22 +272,21 @@ app.post('/verify-email', async (req, res) => {
     await user.save();
 
     // Redirect to a success page (e.g., login page)
-    res.redirect('/login');
-
+    res.redirect("/login");
   } catch (err) {
     console.error(err);
-    res.render('verify-email', { 
-      message: 'Something went wrong, try again later.',
+    res.render("verify-email", {
+      message: "Something went wrong, try again later.",
       isAuthenticated: req.isAuthenticated(), // Pass isAuthenticated
-      username: req.user ? req.user.username : null // Pass username if authenticated
+      username: req.user ? req.user.username : null, // Pass username if authenticated
     });
   }
 });
 
 // Route for logging out
-app.get('/logout', (req, res) => {
+app.get("/logout", (req, res) => {
   req.logout(() => {
-    res.redirect('/');
+    res.redirect("/");
   });
 });
 
@@ -279,7 +296,9 @@ app.listen(port, () => {
 });
 
 app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.isAuthenticated ? req.isAuthenticated() : false;
+  res.locals.isAuthenticated = req.isAuthenticated
+    ? req.isAuthenticated()
+    : false;
   next();
 });
 
@@ -292,11 +311,11 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   console.error(err.stack);
 
-  res.status(500).render('error', { 
-      message: err.message || "An unexpected error occurred. Please try again later.",
-      isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false 
+  res.status(500).render("error", {
+    message:
+      err.message || "An unexpected error occurred. Please try again later.",
+    isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false,
   });
 });
 
-app.use(express.static(path.join(__dirname, 'public/css')));
-  
+app.use(express.static(path.join(__dirname, "public/css")));
