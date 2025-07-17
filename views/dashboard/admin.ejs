@@ -1,0 +1,70 @@
+<%- include('../partials/nav') %> <%- include('../partials/sidebar-admin') %>
+
+<div class="main-content" style="margin-left: 220px; padding: 2rem">
+  <h1>Admin Dashboard</h1>
+  <p>Welcome, Admin <%= username %>!</p>
+
+  <div class="stats">
+    <div class="card">Total Clients: 17</div>
+    <div class="card">Active Chatbots: 14</div>
+    <div class="card">Today’s Usage: 212 interactions</div>
+  </div>
+
+  <section style="margin-top: 2rem">
+    <h2>Recent Client Activity</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Website</th>
+          <th>Plan</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>john@example.com</td>
+          <td>example.com</td>
+          <td>Pro</td>
+          <td>✅ Active</td>
+        </tr>
+        <!-- Dynamically populate -->
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<style>
+  .stats {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .card {
+    background: #1a1a1a;
+    color: #00f0ff;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px #0005;
+  }
+
+  table {
+    width: 100%;
+    background: #111;
+    color: #ccc;
+    border-collapse: collapse;
+  }
+
+  table th,
+  table td {
+    padding: 1rem;
+    border-bottom: 1px solid #222;
+  }
+
+  table th {
+    color: #00f0ff;
+    text-align: left;
+  }
+</style>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,292 @@
+<%- include('partials/head') %> <%- include('partials/nav') %>
+
+<div class="login-wrapper">
+  <div class="login-content">
+    <div class="login-form">
+      <h1>Welcome to <span class="brand">NeuronBotAI</span></h1>
+      <p class="subtitle">Sign in to your smart AI dashboard</p>
+
+      <!-- Traditional Email Login -->
+      <form action="/login" method="POST">
+        <input type="email" name="username" placeholder="Email" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit">Login with Email</button>
+      </form>
+
+      <div class="divider">or</div>
+
+      <!-- Google Login -->
+      <button id="googleLogin" class="btn-google">Continue with Google</button>
+
+      <div class="divider">or</div>
+
+      <!-- Phone Login -->
+      <input type="text" id="phoneNumber" placeholder="Enter phone number" />
+      <div id="recaptcha-container"></div>
+      <button id="sendOtpBtn">Send OTP</button>
+
+      <input
+        type="text"
+        id="otp"
+        placeholder="Enter OTP"
+        style="display: none"
+      />
+      <button id="verifyOtpBtn" style="display: none">Verify OTP</button>
+
+      <div class="switch-link">
+        Don’t have an account? <a href="/register">Create one</a>
+      </div>
+    </div>
+
+    <div class="login-animation">
+      <img
+        src="/assets/svg/login-robot.svg"
+        alt="AI Login"
+        class="svg-animate"
+      />
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    RecaptchaVerifier,
+    signInWithPhoneNumber,
+  } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_FIREBASE_API_KEY",
+    authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
+    projectId: "YOUR_FIREBASE_PROJECT_ID",
+    storageBucket: "YOUR_FIREBASE_BUCKET",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  document.getElementById("googleLogin").onclick = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log("Google Login Success:", user);
+      // TODO: Send to server
+    } catch (err) {
+      console.error("Google login error:", err.message);
+    }
+  };
+
+  window.recaptchaVerifier = new RecaptchaVerifier(
+    auth,
+    "recaptcha-container",
+    {
+      size: "normal",
+      callback: () => console.log("Recaptcha solved"),
+    }
+  );
+
+  document.getElementById("sendOtpBtn").onclick = async () => {
+    const phone = document.getElementById("phoneNumber").value;
+    if (!phone) return alert("Enter phone");
+
+    try {
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        phone,
+        window.recaptchaVerifier
+      );
+      window.confirmationResult = confirmationResult;
+      document.getElementById("otp").style.display = "block";
+      document.getElementById("verifyOtpBtn").style.display = "block";
+    } catch (err) {
+      console.error("OTP error:", err.message);
+    }
+    // After successful Google login
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    await fetch("/auth/firebase", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: user.email,
+        displayName: user.displayName,
+        provider: "google",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.redirect) window.location.href = data.redirect;
+      });
+
+    // After successful Phone OTP login
+    await fetch("/auth/firebase", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        phone: user.phoneNumber,
+        displayName: "Phone User",
+        provider: "phone",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.redirect) window.location.href = data.redirect;
+      });
+  };
+
+  document.getElementById("verifyOtpBtn").onclick = async () => {
+    const otp = document.getElementById("otp").value;
+    try {
+      const result = await window.confirmationResult.confirm(otp);
+      const user = result.user;
+      console.log("OTP Login Success:", user);
+      // TODO: Send to server
+    } catch (err) {
+      console.error("Verify error:", err.message);
+    }
+  };
+</script>
+
+<style>
+  .login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    min-height: 80vh;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: white;
+  }
+
+  .login-content {
+    display: flex;
+    max-width: 1100px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.1);
+    overflow: hidden;
+  }
+
+  .login-form {
+    flex: 1;
+    padding: 3rem;
+  }
+
+  .login-form h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .brand {
+    color: #00fff0;
+    font-weight: bold;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    color: #bbb;
+    margin-bottom: 2rem;
+  }
+
+  .btn-google {
+    background: #4285f4;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+
+  .divider {
+    margin: 1rem 0;
+    font-size: 0.85rem;
+    color: #aaa;
+    text-align: center;
+  }
+
+  input {
+    display: block;
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #666;
+    background: #111;
+    color: white;
+  }
+
+  button {
+    margin-top: 0.5rem;
+    padding: 0.6rem;
+    background: #00fff0;
+    color: black;
+    font-weight: bold;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  button:hover {
+    background: #0ff;
+  }
+
+  .login-animation {
+    flex: 1;
+    background: #0f0f0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .svg-animate {
+    max-width: 100%;
+    animation: float 5s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+
+  .switch-link {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .switch-link a {
+    color: #00fff0;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .login-content {
+      flex-direction: column;
+    }
+    .login-animation {
+      display: none;
+    }
+  }
+</style>

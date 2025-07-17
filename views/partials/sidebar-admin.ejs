@@ -1,0 +1,43 @@
+<div class="sidebar">
+  <ul>
+    <li><a href="/admin/dashboard">Dashboard</a></li>
+    <li><a href="/admin/clients">Clients</a></li>
+    <li><a href="/admin/analytics">Chatbot Analytics</a></li>
+    <li><a href="/admin/packages">Packages</a></li>
+    <li><a href="/logout">Logout</a></li>
+  </ul>
+</div>
+
+<style>
+  .sidebar {
+    background: #111;
+    width: 220px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding-top: 60px;
+  }
+
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .sidebar ul li {
+    margin: 20px 0;
+  }
+
+  .sidebar ul li a {
+    color: #ccc;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+    transition: background 0.3s;
+  }
+
+  .sidebar ul li a:hover {
+    background: #222;
+    color: #00f0ff;
+  }
+</style>

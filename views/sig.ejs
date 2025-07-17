@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head') %>
+    <link rel="stylesheet" href="/css/auth.css" />
+    <title>Sign Up - SmartChat AI</title>
+  </head>
+  <body>
+    <main class="auth-container">
+      <section class="auth-form-side">
+        <div class="auth-logo">SmartChat AI</div>
+        <h2>Create an Account</h2>
+        <p>Start automating your business in minutes</p>
+        <form action="/signup" method="POST" class="auth-form">
+          <input
+            type="text"
+            name="businessName"
+            placeholder="Business Name"
+            required
+          />
+          <input
+            type="url"
+            name="website"
+            placeholder="https://yourdomain.com"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="you@company.com"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="••••••••"
+            required
+          />
+          <input type="password" name=""Re-enter your passwor"
+          placeholder="********" required />
+          <input
+            type="tel"
+            name="phone"
+            placeholder="+1 234 567 8901"
+            required
+          />
+          <button type="submit" class="btn-primary">Sign Up</button>
+        </form>
+        <div class="alt-login">
+          <button class="btn-google">Continue with Google</button>
+        </div>
+        <p class="switch-link">
+          Already have an account? <a href="/login">Log In</a>
+        </p>
+      </section>
+      <section class="auth-info-side">
+        <h3>Join hundreds of businesses using SmartChat AI</h3>
+        <p>
+          Instant setup, zero code — get your AI assistant live and growing
+          leads today.
+        </p>
+        <div class="info-graphic"><!-- CSS or SVG mockup placeholder --></div>
+      </section>
+    </main>
+    <%- include('partials/footer') %>
+  </body>
+</html>

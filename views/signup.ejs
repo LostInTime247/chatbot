@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head') %>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #0f0f0f;
+        color: #fff;
+        overflow: hidden;
+      }
+
+      .container {
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .form-box {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        padding: 2.5rem;
+        border-radius: 12px;
+        width: 350px;
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        z-index: 1;
+      }
+
+      .form-box h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+      }
+
+      .form-box input {
+        width: 100%;
+        margin: 0.5rem 0;
+        padding: 0.8rem;
+        background: #1a1a1a;
+        border: none;
+        border-radius: 8px;
+        color: white;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 0.8rem;
+        background: #00d1ff;
+        border: none;
+        border-radius: 8px;
+        margin-top: 1rem;
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s ease;
+      }
+
+      .btn:hover {
+        background: #00aacc;
+      }
+
+      .social-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 1.5rem;
+      }
+
+      .google-btn,
+      .phone-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.8rem;
+        border-radius: 8px;
+        background-color: white;
+        color: black;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+
+      .google-btn:hover,
+      .phone-btn:hover {
+        background-color: #e6e6e6;
+      }
+
+      svg.particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/nav') %>
+    <div class="container">
+      <div class="form-box">
+        <h2>Create an Account</h2>
+
+        <!-- Signup form -->
+        <form method="POST" action="/signup">
+          <input type="text" name="username" placeholder="Username" required />
+          <input type="email" name="email" placeholder="Email" required />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          <button type="submit" class="btn">Sign Up</button>
+        </form>
+
+        <!-- Social auth options -->
+        <div class="social-btns">
+          <div class="google-btn" onclick="googleSignup()">
+            Sign Up with Google
+          </div>
+          <div class="phone-btn" onclick="phoneAuthSignup()">
+            Sign Up with Phone OTP
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG Background Particles -->
+      <svg class="particles">
+        <defs>
+          <radialGradient id="grad1" r="100%" cx="50%" cy="50%">
+            <stop offset="0%" stop-color="#00ffff" stop-opacity="1" />
+            <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <circle cx="20%" cy="30%" r="200" fill="url(#grad1)">
+          <animate
+            attributeName="r"
+            values="200;300;200"
+            dur="6s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        <circle cx="70%" cy="70%" r="150" fill="url(#grad1)">
+          <animate
+            attributeName="r"
+            values="150;250;150"
+            dur="5s"
+            repeatCount="indefinite"
+          />
+        </circle>
+      </svg>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <!-- Firebase Auth Scripts -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+        RecaptchaVerifier,
+        signInWithPhoneNumber,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT.appspot.com",
+        messagingSenderId: "SENDER_ID",
+        appId: "APP_ID",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      function googleSignup() {
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            const user = result.user;
+            alert("Google signup successful!");
+            // Optionally send to server
+          })
+          .catch((error) => {
+            alert("Error: " + error.message);
+          });
+      }
+
+      window.googleSignup = googleSignup;
+
+      function phoneAuthSignup() {
+        const phoneNumber = prompt("Enter phone number with +country code:");
+        if (!phoneNumber) return;
+
+        window.recaptchaVerifier = new RecaptchaVerifier(auth, "phone-btn", {
+          size: "invisible",
+          callback: () => {},
+        });
+
+        signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+          .then((confirmationResult) => {
+            const otp = prompt("Enter the OTP sent to your phone:");
+            return confirmationResult.confirm(otp);
+          })
+          .then((result) => {
+            const user = result.user;
+            alert("Phone signup successful!");
+            // Send user info to backend (optional)
+          })
+          .catch((error) => {
+            alert("OTP Failed: " + error.message);
+          });
+      }
+
+      window.phoneAuthSignup = phoneAuthSignup;
+    </script>
+  </body>
+</html>
